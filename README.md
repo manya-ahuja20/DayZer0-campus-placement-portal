@@ -2,7 +2,6 @@
 
 A role-based web application that replaces scattered emails, spreadsheets and notice boards with one connected placement workflow. Students, recruiting companies and the Training & Placement Officer (TPO) work on the same relational data: drives, eligibility, applications, resume matching, interviews and notifications.
 
-Built as a Software Engineering Lab project at VIT.
 
 ## Features
 
@@ -93,8 +92,8 @@ Matching failures never block an application. Scanned image-only PDFs have no te
 **Prerequisites:** Node.js 18+, PostgreSQL 14+.
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/manya-ahuja20/DayZer0-campus-placement-portal.git
+cd DayZer0-campus-placement-portal
 ```
 
 **1. Database**
@@ -181,4 +180,4 @@ frontend/src/
 
 ## Author
 
-Manya Ahuja, VIT.
+Manya Ahuja
