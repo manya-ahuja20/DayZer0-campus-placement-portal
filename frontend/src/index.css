@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #17263F;
+  --ink-soft: #57637A;
+  --paper: #F6F4EE;
+  --surface: #FFFFFF;
+  --line: #DCD8CC;
+  --brass: #8F6A2E;
+  --success: #2E6B4E;
+  --danger: #A13A3A;
+  --radius: 3px;
+}
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; min-height: 100%; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+}
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
+h1 { font-size: 28px; }
+h2 { font-size: 21px; }
+h3 { font-size: 16px; }
+p { margin: 0 0 10px; }
+a { color: var(--ink); }
+
+.app-topbar { background: var(--ink); color: #EDEBE3; padding: 14px 28px; display: flex; align-items: baseline; justify-content: space-between; }
+.app-brand { font-family: 'Fraunces', Georgia, serif; font-size: 19px; font-weight: 600; color: #fff; }
+.app-brand span { font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 400; color: #B7BECB; margin-left: 10px; }
+.app-user { font-size: 13px; color: #C7CCD8; display: flex; align-items: center; gap: 14px; }
+.app-user b { color: #fff; font-weight: 500; }
+
+.app-nav { background: var(--surface); border-bottom: 1px solid var(--line); padding: 0 28px; display: flex; gap: 24px; }
+.app-nav a { display: inline-block; padding: 12px 2px; font-size: 13.5px; text-decoration: none; color: var(--ink-soft); border-bottom: 2px solid transparent; }
+.app-nav a.active { color: var(--ink); border-bottom-color: var(--brass); }
+
+.app-main { max-width: 880px; margin: 0 auto; padding: 36px 28px 80px; }
+.page-head { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.page-head p { color: var(--ink-soft); font-size: 14px; }
+
+.btn { font-family: 'IBM Plex Sans', sans-serif; font-size: 13.5px; font-weight: 500; padding: 9px 16px; border-radius: var(--radius); border: 1px solid var(--ink); background: var(--ink); color: #fff; cursor: pointer; }
+.btn:hover { background: #0E1930; border-color: #0E1930; }
+.btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn-outline:hover { border-color: var(--ink); }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+.btn-danger:hover { background: var(--danger); color: #fff; }
+.btn-sm { padding: 6px 12px; font-size: 12.5px; }
+
+label.field-label { display: block; font-size: 12.5px; color: var(--ink-soft); margin: 14px 0 5px; }
+input, select, textarea {
+  font-family: 'IBM Plex Sans', sans-serif; font-size: 14px; padding: 9px 11px;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink); }
+.form-row { margin-bottom: 4px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+.record { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px; background: var(--surface); }
+.record-title { font-family: 'Fraunces', Georgia, serif; font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.record-meta { font-size: 13px; color: var(--ink-soft); margin-bottom: 10px; }
+.record-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; gap: 8px; flex-wrap: wrap; }
+
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+.status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.status-pending { color: var(--brass); }
+.status-approved, .status-verified, .status-selected, .status-shortlisted { color: var(--success); }
+.status-rejected { color: var(--danger); }
+.status-applied { color: var(--ink-soft); }
+
+.auth-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--paper); }
+.auth-box { width: 380px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 36px 32px; }
+.auth-brand { font-family: 'Fraunces', Georgia, serif; font-size: 22px; font-weight: 600; margin-bottom: 2px; }
+.auth-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 24px; }
+.auth-switch { margin-top: 18px; font-size: 13px; color: var(--ink-soft); text-align: center; }
+.empty-state { padding: 32px 0; text-align: center; color: var(--ink-soft); font-size: 14px; }
+
+.btn-outline-dark { background: transparent; color: #EDEBE3; border: 1px solid #3C4A63; }
+.btn-outline-dark:hover { border-color: #EDEBE3; }
