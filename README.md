@@ -49,8 +49,8 @@ flowchart TD
         CTRL --> UP["Multer (PDF upload)"]
     end
     CTRL --> DB[("PostgreSQL")]
-    UP --> FS[("uploads/resumes")]
-    MATCH -.->|"reads PDF"| FS
+    UP --> DB
+    MATCH -.->|"reads PDF bytes"| DB
 ```
 
 **Role-based access control is structural.** There is no shared `users` table. A person's role is the table their row lives in (`student`, `company` or `admin`). Login checks the matching table and issues a JWT carrying `{ id, role }`, and every protected route checks that role server-side.
@@ -63,8 +63,7 @@ Constraints that carry business rules:
 - `UNIQUE(student_id, drive_id)` on `application` blocks duplicate applications
 - `UNIQUE(round_id, student_id)` on `interview_booking` blocks duplicate bookings
 - Foreign keys cascade where a child is meaningless without its parent, and a resume used by an application cannot be deleted
-- Resume PDFs live on disk. The database stores only the stored file name and the original name
-
+- Resume PDFs are stored in Postgres as `BYTEA` alongside the original file name, so they survive restarts on hosts with ephemeral disks
 ## Server-side rules
 
 These are enforced by the API, not just hidden in the UI.
@@ -86,6 +85,15 @@ Implemented in `backend/services/matcher.js` and run when a student applies.
 4. Store the score on the application and the matched and missing keywords as feedback
 
 Matching failures never block an application. Scanned image-only PDFs have no text layer and score 0 with an explanatory message.
+
+
+## Live demo
+
+Frontend: https://day-zer0-campus-placement-portal.vercel.app/
+API: https://dayzero-api.onrender.com
+
+Hosted on free tiers: Vercel (React), Render (Express API) and Neon (PostgreSQL). The API sleeps after 15 idle minutes, so the first request can take about a minute.
+
 
 ## Getting started
 
