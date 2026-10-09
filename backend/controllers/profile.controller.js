@@ -51,13 +51,25 @@ exports.uploadResume = async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      `INSERT INTO resume (student_id, file_name, original_name) VALUES ($1,$2,$3) RETURNING *`,
-      [id, req.file.filename, req.file.originalname]
+      `INSERT INTO resume (student_id, file_name, original_name, file_data)
+       VALUES ($1,$2,$3,$4)
+       RETURNING resume_id, student_id, file_name, original_name, upload_date, version`,
+      [id, `${id}_${Date.now()}.pdf`, req.file.originalname, req.file.buffer]
     );
     res.status(201).json(rows[0]);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
+};
+
+exports.listResumes = async (req, res) => {
+  const { id, role } = req.user;
+  if (role !== 'student') return res.status(403).json({ error: 'Only students have resumes' });
+  const { rows } = await pool.query(
+    `SELECT resume_id, student_id, file_name, original_name, upload_date, version
+     FROM resume WHERE student_id=$1 ORDER BY upload_date DESC`, [id]
+  );
+  res.json(rows);
 };
 
 exports.deleteResume = async (req, res) => {
@@ -67,14 +79,10 @@ exports.deleteResume = async (req, res) => {
 
   try {
     const { rows } = await pool.query(
-      'DELETE FROM resume WHERE resume_id=$1 AND student_id=$2 RETURNING *',
+      'DELETE FROM resume WHERE resume_id=$1 AND student_id=$2 RETURNING resume_id',
       [resumeId, id]
     );
     if (!rows.length) return res.status(404).json({ error: 'Resume not found' });
-
-    const fs = require('fs');
-    const path = require('path');
-    fs.unlink(path.join(__dirname, '..', 'uploads', 'resumes', rows[0].file_name), () => {});
     res.json({ message: 'Resume deleted' });
   } catch (err) {
     if (err.code === '23503') return res.status(409).json({ error: 'Cannot delete a resume already used in an application' });
@@ -82,22 +90,13 @@ exports.deleteResume = async (req, res) => {
   }
 };
 
-const path = require('path');
-
 exports.downloadResume = async (req, res) => {
-  const { resumeId } = req.params;
-  const { rows } = await pool.query('SELECT * FROM resume WHERE resume_id=$1', [resumeId]);
-  if (!rows.length) return res.status(404).json({ error: 'Resume not found' });
-
-  const filePath = path.join(__dirname, '..', 'uploads', 'resumes', rows[0].file_name);
-  res.sendFile(filePath);
-};
-
-exports.listResumes = async (req, res) => {
-  const { id, role } = req.user;
-  if (role !== 'student') return res.status(403).json({ error: 'Only students have resumes' });
   const { rows } = await pool.query(
-    `SELECT * FROM resume WHERE student_id=$1 ORDER BY upload_date DESC`, [id]
+    'SELECT original_name, file_data FROM resume WHERE resume_id=$1', [req.params.resumeId]
   );
-  res.json(rows);
+  if (!rows.length || !rows[0].file_data) return res.status(404).json({ error: 'Resume not found' });
+  const name = (rows[0].original_name || 'resume.pdf').replace(/[^\w.\- ]/g, '_');
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `inline; filename="${name}"`);
+  res.send(rows[0].file_data);
 };

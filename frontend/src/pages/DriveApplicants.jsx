@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import api from '../api/axios';
+import api, { API_BASE } from '../api/axios';
 import Layout from '../components/Layout';
 
 export default function DriveApplicants() {
@@ -42,7 +42,7 @@ export default function DriveApplicants() {
           <div className="record-title">{a.name}</div>
           <div className="record-meta">
             {a.branch} · CGPA {a.cgpa} · {a.email} ·{' '} · Match: {a.resume_match_score !== null ? `${a.resume_match_score}%` : 'N/A'}
-            <a href={`http://localhost:5000/api/profile/resume/${a.resume_id}/download`} target="_blank" rel="noreferrer">{a.resume_name || 'View resume'}</a>
+            <a href={`${API_BASE}/api/profile/resume/${a.resume_id}/download`} target="_blank" rel="noreferrer">{a.resume_name || 'View resume'}</a>
           </div>
           <span className={`status status-${a.status}`}>{a.status}</span>
           <div className="record-actions">

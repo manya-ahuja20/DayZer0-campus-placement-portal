@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import api from '../api/axios';
+import api, { API_BASE } from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
@@ -103,7 +103,7 @@ export default function Profile() {
               <div className="record-title" style={{ fontSize: 14 }}>{r.original_name}</div>
               <div className="record-meta">
                 Uploaded {r.upload_date?.slice(0, 10)} ·{' '}
-                <a href={`http://localhost:5000/api/profile/resume/${r.resume_id}/download`} target="_blank" rel="noreferrer">View</a>
+                <a href={`${API_BASE}/api/profile/resume/${r.resume_id}/download`} target="_blank" rel="noreferrer">View</a>
               </div>
               <div className="record-actions">
                 <button className="btn-danger btn btn-sm" onClick={() => deleteResume(r.resume_id)}>Delete</button>

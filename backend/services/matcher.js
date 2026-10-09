@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const pdf = require('pdf-parse/lib/pdf-parse.js');
 
 const STOP = new Set('a an the and or of to in for with on at by from as is are was were be been this that these those it its we you your our will can should must have has had not but if their they them who which what when where how all any each such more other than into over about also etc using use work working experience years year strong good ability able looking hiring candidates candidate role team'.split(' '));
@@ -11,10 +9,7 @@ const tokenize = (t) =>
 
 const freq = (tokens) => tokens.reduce((m, t) => ((m[t] = (m[t] || 0) + 1), m), {});
 
-exports.extractText = async (fileName) => {
-  const buf = fs.readFileSync(path.join(__dirname, '..', 'uploads', 'resumes', fileName));
-  return (await pdf(buf)).text;
-};
+exports.extractText = async (buffer) => (await pdf(buffer)).text;
 
 exports.matchResume = (resumeText, jdText) => {
   const r = freq(tokenize(resumeText));

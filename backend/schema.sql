@@ -104,3 +104,5 @@ CREATE TABLE interview_booking (
   booked_at TIMESTAMP DEFAULT NOW(),
   UNIQUE(round_id, student_id)
 );
+
+ALTER TABLE resume ADD COLUMN file_data BYTEA;

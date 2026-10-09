@@ -19,7 +19,7 @@ exports.applyToDrive = async (req, res) => {
     if (new Date(drive.deadline) < new Date()) return res.status(403).json({ error: 'Application deadline has passed' });
 
     // 2. Resume must belong to this student
-    const resumeRes = await pool.query('SELECT * FROM resume WHERE resume_id=$1 AND student_id=$2', [resume_id, id]);
+    const resumeRes = await pool.query('SELECT resume_id, file_data FROM resume WHERE resume_id=$1 AND student_id=$2', [resume_id, id]);
     if (!resumeRes.rows.length) return res.status(400).json({ error: 'Invalid resume selection' });
 
     // 3. Eligibility check
@@ -44,7 +44,7 @@ exports.applyToDrive = async (req, res) => {
       [id, driveId, resume_id]
     );
         try {
-      const text = await extractText(resumeRes.rows[0].file_name);
+      const text = await extractText(resumeRes.rows[0].file_data);
       const m = matchResume(text, `${drive.job_title} ${drive.job_description || ''}`);
       await pool.query('UPDATE application SET resume_match_score=$1 WHERE application_id=$2', [m.score, rows[0].application_id]);
       await pool.query('INSERT INTO ai_resume_matcher (application_id, match_score, feedback) VALUES ($1,$2,$3)', [rows[0].application_id, m.score, m.feedback]);
